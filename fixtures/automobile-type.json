@@ -1,0 +1,30 @@
+[
+    { 
+        "model":"choices.automobiletype",
+        "pk":1,
+        "fields":{ 
+            "name":"Bicycle"
+        }
+    },
+    { 
+        "model":"choices.automobiletype",
+        "pk":2,
+        "fields":{ 
+            "name":"Two-Wheeler"
+        }
+    },
+    { 
+        "model":"choices.automobiletype",
+        "pk":3,
+        "fields":{ 
+            "name":"Four-Wheeler"
+        }
+    },
+    { 
+        "model":"choices.automobiletype",
+        "pk":4,
+        "fields":{ 
+            "name":"Tractor"
+        }
+    }
+]

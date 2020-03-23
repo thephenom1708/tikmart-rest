@@ -1,0 +1,30 @@
+[
+{
+    "model": "products.product",
+    "pk": 1,
+    "fields": {
+        "title": "Hat",
+        "slug": "hat",
+        "description": "Cowboy Hat",
+        "price": "100.00",
+        "image": "products/1035872772/1035872772.jpeg",
+        "featured": false,
+        "active": true,
+        "timestamp": "2020-01-05T12:36:52.442Z"
+    }
+},
+{
+    "model": "products.product",
+    "pk": 2,
+    "fields": {
+        "title": "T-shirt",
+        "slug": "t-shirt",
+        "description": "Bewkoof Tshirt",
+        "price": "100.99",
+        "image": "products/2405962644/2405962644.jpeg",
+        "featured": false,
+        "active": true,
+        "timestamp": "2020-01-08T13:58:38.168Z"
+    }
+}
+]

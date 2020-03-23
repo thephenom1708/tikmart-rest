@@ -1,0 +1,62 @@
+[
+    { 
+        "model":"products.product",
+        "pk":1,
+        "fields":{ 
+            "title":"Greensole Sporty",
+            "slug":"greensole-sporty",
+            "description":"Best Sport Shoes",
+            "price":"1800.00",
+            "image":"products/2240757325/2240757325.jpeg",
+            "featured":false,
+            "active":true,
+            "timestamp":"2020-01-19T18:40:28.318Z",
+            "content_type":24
+        }
+    },
+    { 
+        "model":"products.product",
+        "pk":2,
+        "fields":{ 
+            "title":"Bomber Jacket",
+            "slug":"bomber-jacket",
+            "description":"Best Bomber Jacket",
+            "price":"3500.00",
+            "image":"products/2957632320/2957632320.jpeg",
+            "featured":true,
+            "active":true,
+            "timestamp":"2020-01-19T18:54:00.547Z",
+            "content_type":25
+        }
+    },
+    { 
+        "model":"products.product",
+        "pk":3,
+        "fields":{ 
+            "title":"VERTIGO BLK RUNNING SHOES",
+            "slug":"vertigo-blk-running-shoes",
+            "description":"<ul>\r\n\t<li>Your Perfectly Stylish and Comfy Running Partner! These sports shoes are an unquestionable requirement have for each one of those men out there who are wellness monstrosities. Lotto&#39;s superior running shoes highlight innovation and pattern for most extreme solace and style while running or gymming. The work texture with a tough outsole meet up for a stunning footwear experience. Corrugated Bottom Sole: The base sole is layered to enable you to get a simple grasp superficially walk and run. It is planned such that it keeps you from sliding crosswise over tricky surfaces. Cushioned Collars: The neckline of the running sneaker is vigorously padded for your solace. The cushioning material feels delicate against your skin and aides in keeping rankles and corns from creating. Lace Tie-Up: The running shoes for men by Lotto offer lace-up style for a tweaked fit. The cushioned tongue does not give the pressure of the fixed laces a chance to influence your foot, in this way permitting most extreme solace.</li>\r\n</ul>",
+            "price":"909.00",
+            "image":"products/1956702660/1956702660.jpeg",
+            "featured":true,
+            "active":true,
+            "timestamp":"2020-01-25T05:33:45.257Z",
+            "content_type":24
+        }
+    },
+    { 
+        "model":"products.product",
+        "pk":4,
+        "fields":{ 
+            "title":"PUMA EASY FLIP FLOPS",
+            "slug":"puma-easy-flip-flops",
+            "description":"<table align=\"left\" border=\"1\" cellpadding=\"1\" cellspacing=\"1\" style=\"width:500px\">\r\n\t<thead>\r\n\t\t<tr>\r\n\t\t\t<th scope=\"col\">Attribute</th>\r\n\t\t\t<th scope=\"col\">Value</th>\r\n\t\t</tr>\r\n\t</thead>\r\n\t<tbody>\r\n\t\t<tr>\r\n\t\t\t<td>Color</td>\r\n\t\t\t<td>Blue</td>\r\n\t\t</tr>\r\n\t\t<tr>\r\n\t\t\t<td>Sales Package</td>\r\n\t\t\t<td>1 Pair Slippers</td>\r\n\t\t</tr>\r\n\t\t<tr>\r\n\t\t\t<td>Strap Material&nbsp;</td>\r\n\t\t\t<td>Synthetic</td>\r\n\t\t</tr>\r\n\t\t<tr>\r\n\t\t\t<td>Care Instructions</td>\r\n\t\t\t<td>Wipe with a clean dry cloth</td>\r\n\t\t</tr>\r\n\t\t<tr>\r\n\t\t\t<td>Pack of</td>\r\n\t\t\t<td>1</td>\r\n\t\t</tr>\r\n\t\t<tr>\r\n\t\t\t<td>Sole Material</td>\r\n\t\t\t<td>Rubber</td>\r\n\t\t</tr>\r\n\t\t<tr>\r\n\t\t\t<td>Domestic Warranty</td>\r\n\t\t\t<td>3 Months</td>\r\n\t\t</tr>\r\n\t</tbody>\r\n</table>\r\n\r\n<p>&nbsp;</p>",
+            "price":"809.00",
+            "image":"products/1406312677/1406312677.jpeg",
+            "featured":false,
+            "active":true,
+            "timestamp":"2020-01-26T09:04:38.670Z",
+            "content_type":24
+        }
+    }
+]
