@@ -1,9 +1,7 @@
-from django.contrib.contenttypes.models import ContentType
-
-from carts.models import FootwareInCart, ClothingInCart, AutomobileInCart, FurnitureInCart, SportsEquipmentInCart, \
+from carts.models import FootwearInCart, ClothingInCart, AutomobileInCart, FurnitureInCart, SportsEquipmentInCart, \
     BookInCart
 from categories.models import Footware, Clothing, Automobile, Book, SportsEquipment, Furniture
-from choices.models import FootwareSize, Color, ClothingSize, BookGenere
+from choices.models import FootwearSize, Color, ClothingSize, BookGenre
 from products.models import Product, ProductInCart
 
 
@@ -35,10 +33,10 @@ def get_footwear_cart_obj(request, product_id):
     product_color_id = request.POST.get('colorSelect')
     # product_quantity = request.POST.get('quantity')
 
-    footwear_size = FootwareSize.objects.get(id=product_size_id)
+    footwear_size = FootwearSize.objects.get(id=product_size_id)
     footwear_color = Color.objects.get(id=product_color_id)
     product_obj = Footware.objects.get(id=product_id)
-    footwear_in_cart = FootwareInCart(
+    footwear_in_cart = FootwearInCart(
         title=product_obj.title,
         price=product_obj.price,
         brand=product_obj.brand,
@@ -123,7 +121,7 @@ def get_book_cart_obj(request, product_id):
         price=product_obj.price,
         author=product_obj.author,
         language=product_obj.language,
-        genre=product_obj.genre.set(BookGenere.objects.all()),
+        genre=product_obj.genre.set(BookGenre.objects.all()),
         publisher=product_obj.publisher,
         edition=product_obj.edition,
         no_of_pages=product_obj.no_of_pages

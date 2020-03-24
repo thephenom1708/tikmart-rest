@@ -1,9 +1,5 @@
 from drf_multiple_model.views import ObjectMultipleModelAPIView
 
-from categories.models import (
-    Footware, Clothing, Automobile, Furniture, SportsEquipment
-)
-
 from categories.filters.serializers import (
     FootwearBrandSerializer,
     ClothingBrandSerializer, ClothingSleeveSerializer,
@@ -11,15 +7,16 @@ from categories.filters.serializers import (
     FurnitureBrandSerializer,
     SportsEquipmentBrandSerializer,
 )
-
+from categories.models import (
+    Footware, Clothing, Automobile, Furniture, SportsEquipment
+)
 from choices.models import (
-    Color, FootwareSize, FootwareCategory,
+    Color, FootwearSize, FootwearCategory,
     ClothingSize, ClothingCategory, ClothingOccasion,
     AutomobileType,
     Sport,
-    Language, BookGenere
+    Language, BookGenre
 )
-
 from choices.serializers import (
     ColorSerializer,
     FootwearSizeSerializer, FootwearCategorySerializer,
@@ -38,7 +35,7 @@ class FootwearFiltersAPIView(ObjectMultipleModelAPIView):
             'label': 'colors'
         },
         {
-            'queryset': FootwareCategory.objects.all(),
+            'queryset': FootwearCategory.objects.all(),
             'serializer_class': FootwearCategorySerializer,
             'label': 'categories',
         },
@@ -48,7 +45,7 @@ class FootwearFiltersAPIView(ObjectMultipleModelAPIView):
             'label': 'brands'
         },
         {
-            'queryset': FootwareSize.objects.all(),
+            'queryset': FootwearSize.objects.all(),
             'serializer_class': FootwearSizeSerializer,
             'label': 'sizes'
         }
@@ -153,7 +150,7 @@ class BookFiltersAPIView(ObjectMultipleModelAPIView):
             'label': 'languages'
         },
         {
-            'queryset': BookGenere.objects.all(),
+            'queryset': BookGenre.objects.all(),
             'serializer_class': BookGenreSerializer,
             'label': 'genres'
         }

@@ -1,5 +1,5 @@
-from django.db import models
 from django.conf import settings
+from django.db import models
 
 from products.models import Product
 
@@ -29,6 +29,7 @@ class WishlistManager(models.Manager):
             if user.is_authenticated:
                 user_obj = user
         return self.model.objects.create(user=user_obj)
+
 
 class Wishlist(models.Model):
     user = models.OneToOneField(User, null=True, blank=True, on_delete=models.CASCADE)

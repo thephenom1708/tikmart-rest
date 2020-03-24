@@ -4,9 +4,8 @@ from choices.serializers import ColorSerializer, ClothingCategorySerializer, Clo
 	ClothingOccasionSerializer, AutomobileTypeSerializer, SportSerializer, BookGenreSerializer, AuthorSerializer, \
 	LanguageSerializer, PublisherSerializer
 from choices.serializers import FootwearSizeSerializer, FootwearCategorySerializer
-from products.reviews import ReviewSerializer
-
-from .models import Footware, Clothing, Automobile, Furniture, SportsEquipment, Book
+from reviews.serializers import ReviewSerializer
+from .models import Footwear, Clothing, Automobile, Furniture, SportsEquipment, Book
 
 
 class FootwearSerializer(serializers.ModelSerializer):
@@ -16,7 +15,7 @@ class FootwearSerializer(serializers.ModelSerializer):
 	reviews = ReviewSerializer(read_only=True, many=True)
 
 	class Meta:
-		model = Footware
+		model = Footwear
 		fields = [
 			'id', 'slug', 'title', 'brand', 'image', 'description', 'type', 'gender',
 			'colors', 'sizes',

@@ -1,4 +1,3 @@
-from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
 from django.shortcuts import render
 from django_filters import FilterSet, rest_framework as filters
@@ -6,11 +5,19 @@ from django_filters import FilterSet, rest_framework as filters
 from categories.models import Footware, Clothing, SportsEquipment, Furniture, Automobile, Book
 from categories.utils import footwear_context, automobile_context, clothing_context, book_context, \
     sports_equipment_context
-from choices.models import Color, AutomobileType, ClothingCategory
+from choices.models import Color
+from categories.utils import footwear_context, automobile_context, clothing_context, book_context, \
+    sports_equipment_context
+from django.db.models import Q
+from django.shortcuts import render
+from django_filters import FilterSet, rest_framework as filters
+
+from categories.models import Footware, Clothing, SportsEquipment, Furniture, Automobile, Book
+from choices.models import Color
 
 
 class FootwearFilter(FilterSet):
-    # brand = filters.CharFilter('brand')
+    # brand = filters1.CharFilter('brand')
     categories = filters.CharFilter('type__name')
     colors = filters.CharFilter(method='filter_by_color')
     brands = filters.CharFilter(method='filter_by_brand')

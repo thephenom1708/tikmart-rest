@@ -1,10 +1,10 @@
 from django.contrib import admin
 
 from .forms import FootwareForm, ClothingForm, AutomobileForm, FurnitureForm, SportForm, BookForm
-from .models import Footware, Clothing, Automobile, Electronic, Furniture, SportsEquipment, Book
+from .models import Clothing, Automobile, Electronic, Furniture, SportsEquipment, Book
 
 
-class FootwareAdmin(admin.ModelAdmin):
+class FootwearAdmin(admin.ModelAdmin):
 	form = FootwareForm
 	list_display = ('title', 'brand', 'type', 'get_sizes', 'get_colors', 'price', 'active', 'featured')
 	list_filter = ('brand', 'type', 'active', 'featured')
@@ -106,7 +106,7 @@ class BookAdmin(admin.ModelAdmin):
 		return "\n".join([genre.name for genre in obj.genre.all()])
 
 
-admin.site.register(Footware, FootwareAdmin)
+admin.site.register(Footware, FootwearAdmin)
 admin.site.register(Clothing, ClothingAdmin)
 admin.site.register(Automobile, AutomobileAdmin)
 admin.site.register(Electronic)

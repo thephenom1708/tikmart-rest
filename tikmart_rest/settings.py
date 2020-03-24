@@ -35,6 +35,25 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'rest_framework',
+    'django_filters',
+    'knox',
+    'ckeditor',
+    'ckeditor_uploader',
+    'smart_selects',
+    'corsheaders',
+
+    'accounts',
+    'addresses',
+    'analytics',
+    'billing',
+    'carts',
+    'choices',
+    'orders',
+    'products',
+    'reviews',
+    'wishlist',
 ]
 
 MIDDLEWARE = [
@@ -104,6 +123,7 @@ REST_FRAMEWORK = {
 }
 
 # Application Conf
+USE_DJANGO_JQUERY = True
 AUTH_USER_MODEL = 'accounts.User'
 FORCE_SESSION_TO_ONE = False
 FORCE_INACTIVE_USER_ENDSESSION = False
@@ -113,8 +133,7 @@ LOGIN_URL = '/register/'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
-ROOT_URLCONF = 'tikmart.urls'
-
+ROOT_URLCONF = 'tikmart_rest.urls'
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/

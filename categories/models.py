@@ -3,10 +3,10 @@ from django.db import models
 from django.db.models.signals import pre_save
 from django.urls import reverse
 
-from choices.models import Color, FootwareSize, FootwareCategory, ClothingSize, ClothingCategory, ClothingOccasion, \
-	AutomobileType, Sport, Author, Publisher, Language, BookGenere
+from choices.models import Color, FootwearSize, FootwearCategory, ClothingSize, ClothingCategory, ClothingOccasion, \
+	AutomobileType, Sport, Author, Publisher, Language, BookGenre
 from products.models import Product
-from tikmart.utils import unique_slug_generator
+from tikmart_rest.utils import unique_slug_generator
 
 FOOTWEAR_CATEGORY_CHOICES = (
 	('chappal', 'Chappal'), ('sandal', 'Sandal'), ('slippers', 'Slippers'), ('loafers', 'Loafers'),
@@ -52,21 +52,21 @@ def pre_save_receiver(sender, instance, *args, **kwargs):
 		instance.content_type = ContentType.objects.get(model=model_type.lower())
 
 
-class Footware(Product):
+class Footwear(Product):
 	brand = models.CharField(max_length=100, blank=True, null=True)
-	sizes = models.ManyToManyField(FootwareSize, blank=True)
+	sizes = models.ManyToManyField(FootwearSize, blank=True)
 	colors = models.ManyToManyField(Color, blank=True)
 	gender = models.CharField(max_length=50, default='male', choices=GENDER_CHOICES)
-	type = models.ForeignKey(FootwareCategory, blank=True, null=True, on_delete=models.SET_NULL)
+	type = models.ForeignKey(FootwearCategory, blank=True, null=True, on_delete=models.SET_NULL)
 
 	def __str__(self):
 		return self.title + "--" + self.brand
 
 	def get_absolute_url(self):
-		return reverse("categories:footware_detail", kwargs={"slug": self.slug})
+		return reverse("categories:footwear_detail", kwargs={"slug": self.slug})
 
 
-pre_save.connect(pre_save_receiver, sender=Footware)
+pre_save.connect(pre_save_receiver, sender=Footwear)
 
 
 class Clothing(Product):
@@ -138,7 +138,7 @@ pre_save.connect(pre_save_receiver, sender=SportsEquipment)
 class Book(Product):
 	author = models.ForeignKey(Author, blank=True, null=True, on_delete=models.SET_NULL)
 	language = models.ForeignKey(Language, blank=True, null=True, on_delete=models.SET_NULL)
-	genre = models.ManyToManyField(BookGenere, blank=True)
+	genre = models.ManyToManyField(BookGenre, blank=True)
 	publisher = models.ForeignKey(Publisher, blank=True, null=True, on_delete=models.SET_NULL)
 	edition = models.CharField(max_length=100, blank=True, null=True)
 	no_of_pages = models.IntegerField(blank=True, null=True)

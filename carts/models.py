@@ -1,48 +1,18 @@
 from decimal import Decimal
+
 from django.conf import settings
 from django.db import models
-from django.db.models.signals import pre_save, post_save, m2m_changed
+from django.db.models.signals import pre_save, m2m_changed
 
-from products.models import Product, ProductInCart
-
-from choices.models import Color
-from choices.models import FootwareSize, FootwareCategory
-from choices.models import ClothingSize, ClothingCategory, ClothingOccasion
-from choices.models import AutomobileType
-from choices.models import Sport
-from choices.models import Author, Publisher, Language, BookGenere
+from carts.managers import CartManager
+from products.models import ProductVariant
 
 User = settings.AUTH_USER_MODEL
 
 
-class CartManager(models.Manager):
-    def new_or_get(self, request):
-        qs = self.get_queryset().filter(user=request.user, checkout=False)
-        if qs.count() == 1:
-            new_obj = False
-            cart_obj = qs.first()
-            request.session['cart_items'] = cart_obj.products.count()
-            if request.user.is_authenticated and cart_obj.user is None:
-                cart_obj.user = request.user
-                cart_obj.save()
-        else:
-            cart_obj = Cart.objects.new(user=request.user)
-            new_obj = True
-            request.session['cart_id'] = cart_obj.id
-            request.session['cart_items'] = cart_obj.products.count()
-        return cart_obj, new_obj
-
-    def new(self, user=None):
-        user_obj = None
-        if user is not None:
-            if user.is_authenticated:
-                user_obj = user
-        return self.model.objects.create(user=user_obj)
-
-
 class Cart(models.Model):
     user = models.ForeignKey(User, null=True, blank=True, on_delete=models.CASCADE)
-    products = models.ManyToManyField(ProductInCart, blank=True)
+    products = models.ManyToManyField(ProductVariant, blank=True, related_name='carts', through='carts.CartProduct')
     subtotal = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
     total = models.DecimalField(default=0.00, max_digits=100, decimal_places=2)
     checkout = models.BooleanField(default=False)
@@ -79,190 +49,11 @@ def pre_save_cart_receiver(sender, instance, *args, **kwargs):
 pre_save.connect(pre_save_cart_receiver, sender=Cart)
 
 
-class FootwareInCart(models.Model):
-    title = models.CharField(max_length=100, blank=True, null=True)
-    price = models.DecimalField(decimal_places=2, max_digits=20, default=1.00)
-    brand = models.CharField(max_length=100, blank=True, null=True)
-    size = models.ForeignKey(FootwareSize, blank=True, null=True, on_delete=models.SET_NULL)
-    color = models.ForeignKey(Color, blank=True, null=True, on_delete=models.SET_NULL)
-    gender = models.CharField(max_length=50, blank=True, null=True)
-    type = models.ForeignKey(FootwareCategory, blank=True, null=True, on_delete=models.SET_NULL)
+class CartProduct(models.Model):
+    product_variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, related_name='cart_products')
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=0)
 
     def __str__(self):
-        return str(self.id) + '--' + str(self.title) + "--" + str(self.brand)
+        return self.product_variant.name + '--' + self.cart.name
 
-    def compare(self, obj):
-        excluded_keys = 'id', '_state'  # Example. Modify to your likings.
-        return self._compare(self, obj, excluded_keys)
-
-    def _compare(self, obj1, obj2, excluded_keys):
-        d1, d2 = obj1.__dict__, obj2.__dict__
-        old, new = {}, {}
-        for k, v in d1.items():
-            if k in excluded_keys:
-                continue
-            try:
-                if v != d2[k]:
-                    old.update({k: v})
-                    new.update({k: d2[k]})
-            except KeyError:
-                old.update({k: v})
-        return old, new
-
-
-class ClothingInCart(models.Model):
-    title = models.CharField(max_length=100, blank=True, null=True)
-    price = models.DecimalField(decimal_places=2, max_digits=20, default=1.00)
-    brand = models.CharField(max_length=100, blank=True, null=True)
-    category = models.ForeignKey(ClothingCategory, blank=True, null=True, on_delete=models.SET_NULL)
-    type = models.CharField(max_length=100, blank=True, null=True)
-    sleeve = models.CharField(max_length=50, blank=True, null=True)
-    size = models.ForeignKey(ClothingSize, blank=True, null=True, on_delete=models.SET_NULL)
-    color = models.ForeignKey(Color, blank=True, null=True, on_delete=models.SET_NULL)
-    gender = models.CharField(max_length=50, blank=True, null=True)
-    occasion = models.ForeignKey(ClothingOccasion, blank=True, null=True, on_delete=models.SET_NULL)
-
-    def __str__(self):
-        return self.title + "--" + self.brand
-
-    def compare(self, obj):
-        excluded_keys = 'id', '_state'  # Example. Modify to your likings.
-        return self._compare(self, obj, excluded_keys)
-
-    def _compare(self, obj1, obj2, excluded_keys):
-        d1, d2 = obj1.__dict__, obj2.__dict__
-        old, new = {}, {}
-        for k, v in d1.items():
-            if k in excluded_keys:
-                continue
-            try:
-                if v != d2[k]:
-                    old.update({k: v})
-                    new.update({k: d2[k]})
-            except KeyError:
-                old.update({k: v})
-        return old, new
-
-
-class AutomobileInCart(models.Model):
-    title = models.CharField(max_length=100, blank=True, null=True)
-    price = models.DecimalField(decimal_places=2, max_digits=20, default=1.00)
-    brand = models.CharField(max_length=100, blank=True, null=True)
-    type = models.ForeignKey(AutomobileType, blank=True, null=True, on_delete=models.SET_NULL)
-    colors = models.ForeignKey(Color, blank=True, null=True, on_delete=models.SET_NULL)
-
-    def __str__(self):
-        return self.title + "--" + self.brand
-
-    def compare(self, obj):
-        excluded_keys = 'id', '_state'  # Example. Modify to your likings.
-        return self._compare(self, obj, excluded_keys)
-
-    def _compare(self, obj1, obj2, excluded_keys):
-        d1, d2 = obj1.__dict__, obj2.__dict__
-        old, new = {}, {}
-        for k, v in d1.items():
-            if k in excluded_keys:
-                continue
-            try:
-                if v != d2[k]:
-                    old.update({k: v})
-                    new.update({k: d2[k]})
-            except KeyError:
-                old.update({k: v})
-        return old, new
-
-
-class ElectronicInCart(models.Model):
-    pass
-
-
-class FurnitureInCart(models.Model):
-    title = models.CharField(max_length=100, blank=True, null=True)
-    price = models.DecimalField(decimal_places=2, max_digits=20, default=1.00)
-    brand = models.CharField(max_length=100, blank=True, null=True)
-    material = models.CharField(max_length=100, blank=True, null=True)
-
-    def __str__(self):
-        return self.title + "--" + self.brand
-
-    def compare(self, obj):
-        excluded_keys = 'id', '_state'  # Example. Modify to your likings.
-        return self._compare(self, obj, excluded_keys)
-
-    def _compare(self, obj1, obj2, excluded_keys):
-        d1, d2 = obj1.__dict__, obj2.__dict__
-        old, new = {}, {}
-        for k, v in d1.items():
-            if k in excluded_keys:
-                continue
-            try:
-                if v != d2[k]:
-                    old.update({k: v})
-                    new.update({k: d2[k]})
-            except KeyError:
-                old.update({k: v})
-        return old, new
-
-
-class SportsEquipmentInCart(models.Model):
-    title = models.CharField(max_length=100, blank=True, null=True)
-    price = models.DecimalField(decimal_places=2, max_digits=20, default=1.00)
-    brand = models.CharField(max_length=100, blank=True, null=True)
-    related_sport = models.ForeignKey(Sport, blank=True, null=True, on_delete=models.SET_NULL)
-    weight = models.CharField(max_length=100, blank=True, null=True)
-    material = models.CharField(max_length=100, blank=True, null=True)
-
-    def __str__(self):
-        return self.title + "--" + self.brand
-
-    def compare(self, obj):
-        excluded_keys = 'id', '_state'  # Example. Modify to your likings.
-        return self._compare(self, obj, excluded_keys)
-
-    def _compare(self, obj1, obj2, excluded_keys):
-        d1, d2 = obj1.__dict__, obj2.__dict__
-        old, new = {}, {}
-        for k, v in d1.items():
-            if k in excluded_keys:
-                continue
-            try:
-                if v != d2[k]:
-                    old.update({k: v})
-                    new.update({k: d2[k]})
-            except KeyError:
-                old.update({k: v})
-        return old, new
-
-
-class BookInCart(models.Model):
-    title = models.CharField(max_length=100, blank=True, null=True)
-    price = models.DecimalField(decimal_places=2, max_digits=20, default=1.00)
-    author = models.ForeignKey(Author, blank=True, null=True, on_delete=models.SET_NULL)
-    language = models.ForeignKey(Language, blank=True, null=True, on_delete=models.SET_NULL)
-    genre = models.ManyToManyField(BookGenere, blank=True)
-    publisher = models.ForeignKey(Publisher, blank=True, null=True, on_delete=models.SET_NULL)
-    edition = models.CharField(max_length=100, blank=True, null=True)
-    no_of_pages = models.IntegerField(blank=True, null=True)
-
-
-    def __str__(self):
-        return self.title + "--" + self.author
-
-    def compare(self, obj):
-        excluded_keys = 'id', '_state'  # Example. Modify to your likings.
-        return self._compare(self, obj, excluded_keys)
-
-    def _compare(self, obj1, obj2, excluded_keys):
-        d1, d2 = obj1.__dict__, obj2.__dict__
-        old, new = {}, {}
-        for k, v in d1.items():
-            if k in excluded_keys:
-                continue
-            try:
-                if v != d2[k]:
-                    old.update({k: v})
-                    new.update({k: d2[k]})
-            except KeyError:
-                old.update({k: v})
-        return old, new

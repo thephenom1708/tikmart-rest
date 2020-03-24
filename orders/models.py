@@ -1,4 +1,5 @@
 import math
+
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 from django.urls import reverse
@@ -6,7 +7,7 @@ from django.urls import reverse
 from addresses.models import Address
 from billing.models import BillingProfile
 from carts.models import Cart
-from tikmart.utils import unique_order_id_generator, unique_slug_generator, order_unique_slug_generator
+from tikmart_rest.utils import unique_order_id_generator, order_unique_slug_generator
 
 ORDER_STATUS_CHOICES = (
     ('created', 'Created'),

@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
 from .models import Color, ClothingCategory, ClothingOccasion, ClothingSize, AutomobileType, Sport, Author, Publisher, \
-	Language, BookGenere
-from .models import FootwareSize, FootwareCategory
+    Language, BookGenre
+from .models import FootwearSize, FootwearCategory
 
 
 class ColorSerializer(serializers.ModelSerializer):
@@ -15,7 +15,7 @@ class ColorSerializer(serializers.ModelSerializer):
 
 class FootwearSizeSerializer(serializers.ModelSerializer):
 	class Meta:
-		model = FootwareSize
+		model = FootwearSize
 		fields = [
 			'id', 'uk_in', 'eu', 'length'
 		]
@@ -23,7 +23,7 @@ class FootwearSizeSerializer(serializers.ModelSerializer):
 
 class FootwearCategorySerializer(serializers.ModelSerializer):
 	class Meta:
-		model = FootwareCategory
+		model = FootwearCategory
 		fields = [
 			'id', 'name'
 		]
@@ -95,7 +95,7 @@ class LanguageSerializer(serializers.ModelSerializer):
 
 class BookGenreSerializer(serializers.ModelSerializer):
 	class Meta:
-		model = BookGenere
+		model = BookGenre
 		fields = [
 			'id', 'name'
 		]

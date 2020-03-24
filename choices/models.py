@@ -19,7 +19,7 @@ class Color(models.Model):
 		return self.name + " -- " + self.hexcode
 
 
-class FootwareSize(models.Model):
+class FootwearSize(models.Model):
 	uk_in = models.IntegerField(blank=True, null=True)
 	eu = models.IntegerField(blank=True, null=True)
 	length = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
@@ -28,7 +28,7 @@ class FootwareSize(models.Model):
 		return str(self.uk_in) + " -- " + str(self.eu)
 
 
-class FootwareCategory(models.Model):
+class FootwearCategory(models.Model):
 	name = models.CharField(max_length=100, blank=True, null=True)
 	gender = models.CharField(max_length=50, default='male', choices=GENDER_CHOICES)
 
@@ -102,7 +102,7 @@ class Language(models.Model):
 		return self.name
 
 
-class BookGenere(models.Model):
+class BookGenre(models.Model):
 	name = models.CharField(max_length=100, blank=True, null=True)
 
 	def __str__(self):
