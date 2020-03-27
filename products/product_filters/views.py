@@ -18,6 +18,7 @@ class ProductFiltersRetrieveAPI(generics.RetrieveAPIView):
 
     def get_object(self):
         product_type = self.kwargs['product_type']
+        print("hetrrrrrrr", product_type)
         properties = Property.objects.filter(attr__type=product_type)
         attributes = ProductAttribute.objects.filter(attr__type=product_type)
         return ProductFilters(properties=properties, attributes=attributes)

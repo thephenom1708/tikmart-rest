@@ -13,8 +13,8 @@ class WishlistSerializer(serializers.ModelSerializer):
         model = Wishlist
         fields = '__all__'
 
-    def create(self, validated_data):
-        request = self.context.get('request')
-
-        wishlist_obj, wishlist_created = Wishlist.objects.new_or_get(request=request)
-        return wishlist_obj
+    # def create(self, validated_data):
+    #     request = self.context.get('request')
+    #
+    #     wishlist_obj, wishlist_created = Wishlist.objects.new_or_get(request=request)
+    #     return wishlist_obj

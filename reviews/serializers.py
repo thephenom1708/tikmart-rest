@@ -6,6 +6,7 @@ from reviews.models import Review
 
 class ReviewSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
+    timestamp = serializers.DateTimeField(format="%d %B %Y %I:%m %P")
 
     class Meta:
         model = Review
@@ -14,6 +15,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
 class PostReviewSerializer(serializers.ModelSerializer):
     user = UserSerializer(required=False)
+    # timestamp = serializers.DateTimeField(format="%Y-%M-%d %H:%M %P")
 
     class Meta:
         model = Review

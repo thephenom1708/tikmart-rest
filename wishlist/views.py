@@ -15,9 +15,13 @@ class WishlistViewSet(viewsets.ModelViewSet):
     lookup_field = 'user'
     serializer_class = WishlistSerializer
 
+    def get_object(self):
+        wishlist_obj, wishlist_created = Wishlist.objects.new_or_get(user=self.request.user)
+        return wishlist_obj
+
     def get_queryset(self):
-        # return self.request.user.wishlist
-        return Wishlist.objects.all()
+        return [self.request.user.wishlist]
+        # return Wishlist.objects.all()
 
     @action(methods=['put'], detail=True, url_path='add-to-wishlist', url_name='add_to_wishlist')
     def add_to_wishlist(self, request, user=None):

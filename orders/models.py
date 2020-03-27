@@ -11,7 +11,7 @@ from tikmart_rest.utils import unique_order_id_generator, order_unique_slug_gene
 
 ORDER_STATUS_CHOICES = (
     ('created', 'Created'),
-    ('placed', 'placed'),
+    ('placed', 'Placed'),
     ('shipped', 'Shipped'),
     ('delivered', 'Delivered'),
     ('refunded', 'Refunded'),
@@ -132,9 +132,7 @@ post_save.connect(post_save_cart_total, sender=Cart)
 
 
 def post_save_order(sender, instance, created, *args, **kwargs):
-    print("running")
     if created:
-        print("Updating... first")
         instance.update_total()
 
 

@@ -1,6 +1,8 @@
 from django.db import models
 from django.db.models import Q
 
+from carts.utils import generateAttributesHash
+
 
 class ProductQuerySet(models.query.QuerySet):
     def active(self):
@@ -42,10 +44,15 @@ class ProductManager(models.Manager):
 class ProductVariantManager(models.Manager):
     def new_or_get(self, product, attributes):
         created = False
-        qs = self.get_queryset().filter(product=product, attributes=attributes)
+
+        attribute_ids = attributes.values_list('id', flat=True)
+        attribute_hash = generateAttributesHash(attribute_ids)
+
+        qs = self.get_queryset().filter(hash=attribute_hash)
         if qs.count() == 1:
             obj = qs.first()
         else:
-            obj = self.model.objects.create(product=product, attributes=attributes)
+            obj = self.model.objects.create(product=product)
+            obj.attributes.add(*attributes)
             created = True
         return obj, created

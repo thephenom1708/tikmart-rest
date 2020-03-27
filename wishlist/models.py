@@ -7,20 +7,17 @@ User = settings.AUTH_USER_MODEL
 
 
 class WishlistManager(models.Manager):
-    def new_or_get(self, request):
-        qs = self.get_queryset().filter(user=request.user)
+    def new_or_get(self, user):
+        qs = self.get_queryset().filter(user=user)
         if qs.count() == 1:
             new_obj = False
             wishlist_obj = qs.first()
-            request.session['wishlist_items_count'] = wishlist_obj.products.count()
-            if request.user.is_authenticated and wishlist_obj.user is None:
-                wishlist_obj.user = request.user
+            if user.is_authenticated and wishlist_obj.user is None:
+                wishlist_obj.user = user
                 wishlist_obj.save()
         else:
-            wishlist_obj = Wishlist.objects.new(user=request.user)
+            wishlist_obj = Wishlist.objects.new(user=user)
             new_obj = True
-            request.session['wishlist_id'] = wishlist_obj.id
-            request.session['wishlist_items_count'] = wishlist_obj.products.count()
         return wishlist_obj, new_obj
 
     def new(self, user=None):

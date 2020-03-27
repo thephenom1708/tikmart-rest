@@ -4,8 +4,10 @@ from .models import Order
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('order_id', 'billing_profile', 'payment_method', 'status', 'shipping_total', 'total', 'timestamp', 'paid')
-    list_filter = ('payment_method', 'status', 'paid', 'active')
+    date_hierarchy = 'timestamp'
+    list_display = (
+        'order_id', 'billing_profile', 'payment_method', 'status', 'total', 'timestamp', 'paid')
+    list_filter = ('payment_method', 'status', 'paid', 'timestamp', 'active',)
     fieldsets = (
         ('Order', {'fields': ('order_id', ('cart', 'status'))}),
         ('Billing Profile Details', {'fields': ('billing_profile', ('shipping_address', 'billing_address'))}),
@@ -17,6 +19,6 @@ class OrderAdmin(admin.ModelAdmin):
 
     def get_products(self, obj):
         return "\n".join([o.title for o in obj.cart.products.all()])
-        
+
 
 admin.site.register(Order, OrderAdmin)

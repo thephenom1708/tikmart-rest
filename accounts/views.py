@@ -1,7 +1,7 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from knox.models import AuthToken
-from accounts.serializers import UserSerializer, RegisterSerializer, LoginSerializer
+from accounts.serializers import UserSerializer, RegisterSerializer, LoginSerializer, ChangePasswordSerializer
 
 
 # Register API
@@ -30,6 +30,23 @@ class LoginAPI(generics.GenericAPIView):
             "user": UserSerializer(user, context=self.get_serializer_context()).data,
             "token": AuthToken.objects.create(user)[1]
         })
+
+
+class ChangePasswordAPI(generics.UpdateAPIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+    serializer_class = ChangePasswordSerializer
+
+    def update(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = request.user
+        user.set_password(serializer.validated_data['new_password'])
+        user.save()
+        return Response({
+            'success': True,
+        }, status=status.HTTP_200_OK);
 
 
 # Get User API

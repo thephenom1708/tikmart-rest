@@ -56,7 +56,7 @@ class ProductSerializer(ModelSerializer):
             'id', 'slug', 'title', 'brand', 'image', 'description', 'type', 'gender', 'price',
             'properties', 'attributes',
             'featured', 'active', 'timestamp',
-            'reviews',
+            'rating', 'reviews',
             'url'
         ]
 
@@ -68,7 +68,7 @@ class ProductDetailSerializer(ModelSerializer):
 
 
 class ProductVariantSerializer(ModelSerializer):
-    product = ProductSerializer()
+    product = ProductDetailSerializer()
     attributes = ProductAttributeValueSerializer(many=True)
 
     class Meta:

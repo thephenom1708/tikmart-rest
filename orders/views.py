@@ -3,7 +3,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from addresses.models import Address
-from orders.serializers import OrderSerializer
+from carts.models import Cart
+from orders.serializers import OrderSerializer, OrderDetailSerializer
 from orders.models import Order
 
 
@@ -12,7 +13,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         permissions.AllowAny,
     ]
     lookup_field = 'order_id'
-    serializer_class = OrderSerializer
+    serializer_class = OrderDetailSerializer
 
     def get_queryset(self):
         return self.request.user.billingprofile.orders.filter(active=True)
@@ -50,7 +51,7 @@ class OrderViewSet(viewsets.ModelViewSet):
             url_name='update-payment-method')
     def update_payment_method(self, request, order_id=None):
         order = self.get_object()
-        order.payment_method = request.data.get('payment_method')
+        order.payment_method = request.data.get('paymentMethod')
         order.save()
         return Response(data={
             'orderId': order_id,
@@ -62,6 +63,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         order = self.get_object()
         if order.check_done():
             order.cart.checkout = True
+            order.status = "placed"
             order.cart.save()
         order.save()
         return Response(data={
@@ -73,11 +75,27 @@ class OrderCreateAPI(generics.RetrieveAPIView):
     permission_classes = [
         permissions.IsAuthenticated,
     ]
-    lookup_url_kwarg = ['billing_profile', 'cart']
+    lookup_url_kwarg = ['cart']
     serializer_class = OrderSerializer
 
     def get_object(self):
-        billing_profile = self.kwargs['billing_profile']
-        cart = self.kwargs['cart']
-        obj, created = Order.objects.new_or_get(billing_profile=billing_profile, cart_obj=cart)
+        cart_id = self.kwargs['cart']
+        cart_obj = Cart.objects.get(id=cart_id)
+        billing_profile = self.request.user.billingprofile
+        obj, created = Order.objects.new_or_get(billing_profile=billing_profile, cart_obj=cart_obj)
         return obj
+
+
+class OrderHistoryAPI(generics.ListAPIView):
+    permission_classes = [
+        permissions.IsAuthenticated
+    ]
+    serializer_class = OrderDetailSerializer
+
+    def get_queryset(self):
+        self.request.user.billingprofile.orders.filter(active=True)
+
+    def list(self, request, *args, **kwargs):
+        qs = self.request.user.billingprofile.orders.filter(active=True).exclude(status="created")
+        serializer = self.get_serializer(qs, many=True)
+        return Response(serializer.data)

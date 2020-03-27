@@ -8,7 +8,7 @@ User = settings.AUTH_USER_MODEL
 class Review(models.Model):
     product = models.ForeignKey(Product, null=True, related_name='reviews', on_delete=models.CASCADE)
     user = models.ForeignKey(User, related_name='reviews', on_delete=models.CASCADE)
-    rating = models.IntegerField(default=3, blank=True, null=True)
+    rating = models.PositiveIntegerField(default=5)
     content = models.TextField(blank=True, null=True, max_length=1000)
     timestamp = models.DateTimeField(auto_now_add=True)
 
