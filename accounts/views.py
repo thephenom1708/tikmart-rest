@@ -46,11 +46,11 @@ class ChangePasswordAPI(generics.UpdateAPIView):
         user.save()
         return Response({
             'success': True,
-        }, status=status.HTTP_200_OK);
+        }, status=status.HTTP_200_OK)
 
 
 # Get User API
-class UserAPI(generics.RetrieveAPIView):
+class UserAPI(generics.RetrieveUpdateAPIView):
     permission_classes = [
         permissions.IsAuthenticated,
     ]
@@ -58,3 +58,20 @@ class UserAPI(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        user = self.get_object()
+        first_name = request.data.get('first_name')
+        last_name = request.data.get('last_name')
+        mobile = request.data.get('mobile')
+
+        print(first_name, last_name, mobile)
+
+        user.first_name = first_name
+        user.last_name = last_name
+        user.mobile = mobile
+        user.save()
+
+        return Response({
+            "success": False
+        }, status=status.HTTP_200_OK)

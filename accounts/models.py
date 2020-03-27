@@ -43,7 +43,9 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser):
     email = models.EmailField(max_length=255, unique=True)
-    full_name = models.CharField(max_length=255, blank=True, null=True)
+    first_name = models.CharField(max_length=255, blank=True, null=True)
+    last_name = models.CharField(max_length=255, blank=True, null=True)
+    mobile = models.CharField(max_length=100, blank=True, null=True)
     active = models.BooleanField(default=True)  # can login
     staff = models.BooleanField(default=False)  # staff user non superuser
     admin = models.BooleanField(default=False)  # superuser
@@ -60,10 +62,13 @@ class User(AbstractBaseUser):
     def __str__(self):
         return self.email
 
-    def get_full_name(self):
-        if self.full_name:
-            return self.full_name
-        return self.email
+    def full_name(self):
+        full_name = ""
+        if self.first_name:
+            full_name += self.first_name
+        if self.last_name:
+            full_name += " " + self.last_name
+        return full_name
 
     def get_short_name(self):
         return self.email

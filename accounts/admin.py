@@ -9,16 +9,15 @@ from .models import GuestEmail
 User = get_user_model()
 
 
-
 class UserAdmin(BaseUserAdmin):
     form = UserAdminChangeForm
     add_form = UserAdminCreationForm
 
-    list_display = ('email', 'full_name', 'admin')
+    list_display = ('email', 'first_name', 'last_name', 'mobile', 'admin')
     list_filter = ('admin', 'staff', 'active')
     fieldsets = (
-        ('Personal Details', {'fields': ('full_name', 'email', 'password')}),
-       # ('Full name', {'fields': ()}),
+        ('Personal Details', {'fields': ('email', 'password', 'mobile')}),
+        ('Full name', {'fields': ('first_name', 'last_name')}),
         ('Permissions', {'fields': ('admin', 'staff', 'active',)}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -27,22 +26,20 @@ class UserAdmin(BaseUserAdmin):
         (None, {
             'classes': ('wide',),
             'fields': ('email', 'password1', 'password2')}
-        ),
+         ),
     )
-    search_fields = ('email', 'full_name',)
+    search_fields = ('email', 'first_name' 'last_name',)
     ordering = ('email',)
     filter_horizontal = ()
 
 
 admin.site.register(User, UserAdmin)
-
-# Remove Group Model from admin. We're not using it.
 admin.site.unregister(Group)
-
 
 
 class GuestEmailAdmin(admin.ModelAdmin):
     search_fields = ['email']
+
     class Meta:
         model = GuestEmail
 
