@@ -1,5 +1,5 @@
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, generics
 from rest_framework.filters import SearchFilter, OrderingFilter
 
 from products.filters import ProductFilter
@@ -30,3 +30,11 @@ class ProductDetailViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = ProductDetailSerializer
     queryset = Product.objects.all()
+
+
+class FeaturedProductsAPI(generics.ListAPIView):
+    permission_classes = [
+        permissions.AllowAny
+    ]
+    serializer_class = ProductSerializer
+    queryset = Product.objects.filter(active=True, featured=True)

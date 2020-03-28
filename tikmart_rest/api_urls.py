@@ -11,4 +11,5 @@ urlpatterns = [
     url(r'^cart/', include('carts.urls', namespace='carts_api')),
     url(r'^orders/', include('orders.urls', namespace='orders_api')),
     url(r'^addresses/', include('addresses.urls', namespace='addresses_api')),
+    url(r'^lucky-draw/', include('lucky_draw.urls', namespace='lucky_draw_api'))
 ]
