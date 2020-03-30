@@ -53,7 +53,9 @@ INSTALLED_APPS = [
     'products',
     'reviews',
     'wishlist',
-    'lucky_draw'
+    'lucky_draw',
+
+    # 'ui'
 ]
 
 MIDDLEWARE = [

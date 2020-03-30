@@ -34,7 +34,7 @@ class LoginSerializer(serializers.Serializer):
         user = authenticate(**data)
         if user and user.is_active:
             return user
-        raise serializers.ValidationError("Invalid Credentials")
+        raise serializers.ValidationError("Invalid Credentials! Please try again!")
 
 
 class ChangePasswordSerializer(serializers.Serializer):

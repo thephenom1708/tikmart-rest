@@ -1,8 +1,15 @@
 # Byte-compiled / optimized / DLL files
 .idea/
+
 __pycache__/
 *.py[cod]
 *$py.class
 
 *.vscode
 .DS_Store
+
+/.vscode
+/node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
