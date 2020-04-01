@@ -1,0 +1,1 @@
+web: gunicorn tikmart_rest.wsgi --log-file -

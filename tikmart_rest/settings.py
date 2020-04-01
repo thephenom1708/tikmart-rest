@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -34,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'whitenoise.runserver_nostatic',
     'django.contrib.staticfiles',
 
     'rest_framework',
@@ -54,8 +56,6 @@ INSTALLED_APPS = [
     'reviews',
     'wishlist',
     'lucky_draw',
-
-    # 'ui'
 ]
 
 MIDDLEWARE = [
@@ -76,7 +76,7 @@ ROOT_URLCONF = 'tikmart_rest.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'build')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -153,21 +153,25 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'staticfiles')
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'build', 'static')
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
+    # os.path.join(BASE_DIR, 'static'),
 ]
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 # CKEDITOR Conf
 CKEDITOR_JQUERY_URL = 'https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js'
 
-CKEDITOR_UPLOAD_PATH = os.path.join(MEDIA_ROOT, 'media')
+CKEDITOR_UPLOAD_PATH = os.path.join(MEDIA_ROOT, '')
 CKEDITOR_IMAGE_BACKEND = "pillow"
 
 CKEDITOR_CONFIGS = {
@@ -199,16 +203,4 @@ CKEDITOR_CONFIGS = {
     },
 }
 
-# CORS_REPLACE_HTTPS_REFERER      = False
-# HOST_SCHEME                     = "http://"
-# SECURE_PROXY_SSL_HEADER         = None
-# SECURE_SSL_REDIRECT             = False
-# SESSION_COOKIE_SECURE           = False
-# CSRF_COOKIE_SECURE              = False
-# SECURE_HSTS_SECONDS             = None
-# SECURE_HSTS_INCLUDE_SUBDOMAINS  = False
-# SECURE_FRAME_DENY               = False
-
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# django_heroku.settings(locals())
+django_heroku.settings(locals())

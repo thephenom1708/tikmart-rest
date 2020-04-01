@@ -4,6 +4,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 
 from tikmart_rest import api_urls
+from tikmart_rest.views import index
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -12,6 +13,10 @@ urlpatterns = [
 
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^chaining/', include('smart_selects.urls')),
+]
+
+urlpatterns += [
+    url(r'^', index, name='index')
 ]
 
 admin.site.site_header = "Tikmart Administration"
