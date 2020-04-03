@@ -29,6 +29,7 @@ def m2m_changed_cart_receiver(sender, instance, action, *args, **kwargs):
     if action == 'post_add' or action == 'post_remove' or action == 'post_save' or action == 'post_clear':
         products = instance.products.all()
         total = 0
+        print("\n\n\n\nhey")
         for product_variant in products:
             cart_product = instance.cart_products.get(product_variant=product_variant)
             total += product_variant.product.price * cart_product.quantity
@@ -42,7 +43,7 @@ m2m_changed.connect(m2m_changed_cart_receiver, sender=Cart.products.through)
 
 def pre_save_cart_receiver(sender, instance, *args, **kwargs):
     if instance.subtotal > 0:
-        instance.total = Decimal(instance.subtotal) * Decimal(1.08)  # 8% tax
+        instance.total = Decimal(instance.subtotal) * Decimal(0.08)  # 8% tax
     else:
         instance.total = 0.00
 
@@ -60,9 +61,12 @@ class CartProduct(models.Model):
 
 
 def pre_save_cart_product_receiver(sender, instance, *args, **kwargs):
-    old_instance = CartProduct.objects.get(id=instance.id)
-    changed_quantity = instance.quantity - old_instance.quantity
-    addition_amount = instance.product_variant.product.price * changed_quantity
+    old_instance = CartProduct.objects.filter(id=instance.id).first()
+    if old_instance is not None:
+        changed_quantity = instance.quantity - old_instance.quantity
+        addition_amount = instance.product_variant.product.price * changed_quantity
+    else:
+        addition_amount = instance.product_variant.product.price * instance.quantity
 
     changed_total = instance.cart.subtotal + addition_amount
     if instance.cart.subtotal != changed_total:

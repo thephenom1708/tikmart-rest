@@ -9,15 +9,15 @@ from tikmart_rest.views import index
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(api_urls)),
-    # url(r'^', include('ui.urls', namespace='ui')),
 
     url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^chaining/', include('smart_selects.urls')),
 ]
 
 urlpatterns += [
-    url(r'^', index, name='index')
+    url(r'^$', index, name='index')
 ]
+
 
 admin.site.site_header = "Tikmart Administration"
 admin.site.site_title = "Tikmart Admin Portal"

@@ -29,7 +29,8 @@ class CartAPI(generics.RetrieveUpdateDestroyAPIView):
             attributes = ProductAttributeValue.objects.filter(id__in=attribute_ids)
 
             product_variant, created = ProductVariant.objects.new_or_get(product=product, attributes=attributes)
-            cart.products.add(product_variant)
+            # cart.products.add(product_variant)
+            CartProduct.objects.create(product_variant=product_variant, cart=cart)
             return Response({
                 'product_variant_id': product_variant.id
             }, status=status.HTTP_200_OK)

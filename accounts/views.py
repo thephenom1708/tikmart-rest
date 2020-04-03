@@ -1,11 +1,16 @@
+from knox.models import AuthToken
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
-from knox.models import AuthToken
+
 from accounts.serializers import UserSerializer, RegisterSerializer, LoginSerializer, ChangePasswordSerializer
 
 
 # Register API
-class RegisterAPI(generics.GenericAPIView):
+
+class RegisterAPI(generics.CreateAPIView):
+    permission_classes = [
+        permissions.AllowAny
+    ]
     serializer_class = RegisterSerializer
 
     def post(self, request, *args, **kwargs):
