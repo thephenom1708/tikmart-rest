@@ -29,7 +29,6 @@ def m2m_changed_cart_receiver(sender, instance, action, *args, **kwargs):
     if action == 'post_add' or action == 'post_remove' or action == 'post_save' or action == 'post_clear':
         products = instance.products.all()
         total = 0
-        print("\n\n\n\nhey")
         for product_variant in products:
             cart_product = instance.cart_products.get(product_variant=product_variant)
             total += product_variant.product.price * cart_product.quantity
@@ -43,7 +42,7 @@ m2m_changed.connect(m2m_changed_cart_receiver, sender=Cart.products.through)
 
 def pre_save_cart_receiver(sender, instance, *args, **kwargs):
     if instance.subtotal > 0:
-        instance.total = Decimal(instance.subtotal) * Decimal(0.08)  # 8% tax
+        instance.total = Decimal(instance.subtotal) * Decimal(1.08)  # 8% tax
     else:
         instance.total = 0.00
 
