@@ -3,6 +3,8 @@ from django.conf import settings
 from django.db import models
 from django.db.models.signals import pre_save, m2m_changed
 from django.urls import reverse
+from django.db.models import Avg
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 from carts.utils import generateAttributesHash
 from products.managers import ProductManager, ProductVariantManager
@@ -85,7 +87,10 @@ class Product(models.Model):
     type = models.CharField(max_length=50, choices=PRODUCT_TYPES)
     gender = models.CharField(max_length=50, choices=GENDER_CHOICES, blank=True)
     description = RichTextField()
-    rating = models.DecimalField(decimal_places=1, max_digits=5, default=-1.0)
+    rating = models.DecimalField(decimal_places=1, max_digits=5, default=0.0, validators=[
+        MaxValueValidator(limit_value=5.0),
+        MinValueValidator(limit_value=0.0)
+    ])
     price = models.DecimalField(decimal_places=2, max_digits=20, default=100.00)
     properties = ChainedManyToManyField(
         Property, related_name='products', blank=True,
@@ -131,6 +136,11 @@ class Product(models.Model):
             return "-------"
         else:
             return product_attrs
+
+    def calculate_rating(self):
+        rating = self.reviews.all().aggregate(Avg('rating'))['rating__avg'] or 0.0
+        return rating
+
 
     @property
     def name(self):
