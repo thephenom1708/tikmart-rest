@@ -11,7 +11,7 @@ router.register(r'(?P<product_type>[0-9a-z-]+)', ProductViewSet, 'products-api')
 
 urlpatterns = [
     url(r'filters/', include('products.product_filters.urls', namespace='product_filters_api')),
-    url(r'featured/', FeaturedProductsAPI.as_view(), name='featured-products-api'),
+    url(r'(?P<product_type>[0-9a-z-]+)/featured/', FeaturedProductsAPI.as_view(), name='featured-products-api'),
 ]
 
 urlpatterns += router.urls

@@ -37,4 +37,7 @@ class FeaturedProductsAPI(generics.ListAPIView):
         permissions.AllowAny
     ]
     serializer_class = ProductSerializer
-    queryset = Product.objects.filter(active=True, featured=True)
+
+    def get_queryset(self):
+        product_type = self.kwargs['product_type']
+        return Product.objects.filter(type=product_type, active=True, featured=True)

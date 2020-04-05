@@ -141,7 +141,6 @@ class Product(models.Model):
         rating = self.reviews.all().aggregate(Avg('rating'))['rating__avg'] or 0.0
         return rating
 
-
     @property
     def name(self):
         return self.title
