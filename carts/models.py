@@ -10,6 +10,14 @@ from products.models import ProductVariant
 User = settings.AUTH_USER_MODEL
 
 
+RETURN_STATUS_CHOICES = {
+    ('NA', 'NA'),
+    ('requested', 'REQUESTED'),
+    ('initiated', 'INITIATED'),
+    ('completed', 'COMPLETED')
+}
+
+
 class Cart(models.Model):
     user = models.ForeignKey(User, related_name='carts', null=True, blank=True, on_delete=models.CASCADE)
     products = models.ManyToManyField(ProductVariant, blank=True, related_name='carts', through='carts.CartProduct')
@@ -54,6 +62,8 @@ class CartProduct(models.Model):
     product_variant = models.ForeignKey(ProductVariant, on_delete=models.CASCADE, related_name='cart_products')
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cart_products')
     quantity = models.PositiveIntegerField(default=1)
+    applied_for_return = models.BooleanField(default=False)
+    return_status = models.CharField(max_length=100, choices=RETURN_STATUS_CHOICES, default='NA')
 
     def __str__(self):
         return str(self.id) + '--' + self.product_variant.name + '--' + str(self.cart.id)

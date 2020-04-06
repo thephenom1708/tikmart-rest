@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from addresses.models import Address
-from carts.models import Cart
+from carts.models import Cart, CartProduct
 from orders.serializers import OrderSerializer, OrderDetailSerializer
 from orders.models import Order
 
@@ -16,7 +16,8 @@ class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderDetailSerializer
 
     def get_queryset(self):
-        return self.request.user.billingprofile.orders.filter(active=True)
+        # return self.request.user.billingprofile.orders.filter(active=True)
+        return Order.objects.filter(active=True)
 
     @action(methods=['put'], detail=True,
             url_path='update-shipping-address/(?P<shipping_address>[0-9a-z]+)',
@@ -66,6 +67,40 @@ class OrderViewSet(viewsets.ModelViewSet):
             order.status = "placed"
             order.cart.save()
         order.save()
+        return Response(data={
+            'orderId': order_id
+        }, status=status.HTTP_200_OK)
+
+    @action(methods=['put'], detail=True,
+            url_path='return-product-request/(?P<cart_product_id>[0-9a-z]+)',
+            url_name='return-product-request')
+    def return_product_request(self, request, cart_product_id, order_id=None):
+        cart_product = CartProduct.objects.get(id=cart_product_id)
+        cart_product.applied_for_return = True
+        cart_product.return_status = 'requested'
+        cart_product.save()
+        return Response(data={
+            'orderId': order_id
+        }, status=status.HTTP_200_OK)
+
+    @action(methods=['put'], detail=True,
+            url_path='return-product-initiate/(?P<cart_product_id>[0-9a-z]+)',
+            url_name='return-product-initiate')
+    def return_product_initiate(self, request, cart_product_id, order_id=None):
+        cart_product = CartProduct.objects.get(id=cart_product_id)
+        cart_product.return_status = 'initiated'
+        cart_product.save()
+        return Response(data={
+            'orderId': order_id
+        }, status=status.HTTP_200_OK)
+
+    @action(methods=['put'], detail=True,
+            url_path='return-product-completed/(?P<cart_product_id>[0-9a-z]+)',
+            url_name='return-product-completed')
+    def return_product_completed(self, request, cart_product_id, order_id=None):
+        cart_product = CartProduct.objects.get(id=cart_product_id)
+        cart_product.return_status = 'completed'
+        cart_product.save()
         return Response(data={
             'orderId': order_id
         }, status=status.HTTP_200_OK)

@@ -62,3 +62,4 @@ class CartProductAPI(generics.RetrieveUpdateDestroyAPIView):
         cart_product.save()
 
         return Response(status=status.HTTP_200_OK)
+
