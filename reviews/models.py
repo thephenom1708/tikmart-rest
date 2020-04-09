@@ -1,7 +1,7 @@
 from django.db import models
 from django.conf import settings
 from products.models import Product
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 User = settings.AUTH_USER_MODEL
@@ -21,11 +21,11 @@ class Review(models.Model):
         return self.product.title + "--" + self.user.email + "--" + str(self.rating)
 
 
-def review_post_save_receiver(sender, instance, *args, **kwargs):
+def product_rating_change_signal(sender, instance, *args, **kwargs):
     new_product_rating = instance.product.calculate_rating()
-    print("\n\nRating: ", new_product_rating)
     instance.product.rating = new_product_rating
     instance.product.save()
 
 
-post_save.connect(review_post_save_receiver, sender=Review)
+post_save.connect(product_rating_change_signal, sender=Review)
+post_delete.connect(product_rating_change_signal, sender=Review)

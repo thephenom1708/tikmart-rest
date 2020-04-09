@@ -19,6 +19,7 @@ PRODUCT_TYPES = (
     ('clothing', 'CLOTHING'),
     ('automobile', 'AUTOMOBILE'),
     ('furniture', 'FURNITURE'),
+    ('electronic', 'ELECTRONIC'),
     ('sports-equipment', 'SPORTS-EQUIPMENT'),
     ('book', 'BOOK'),
 )
