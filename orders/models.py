@@ -14,7 +14,6 @@ ORDER_STATUS_CHOICES = (
     ('placed', 'Placed'),
     ('shipped', 'Shipped'),
     ('delivered', 'Delivered'),
-    ('refunded', 'Refunded'),
 )
 
 PAYMENT_METHOD_CHOICES = (
@@ -95,7 +94,7 @@ class Order(models.Model):
         return self.status
 
     def products(self):
-        pass
+        return self.cart.cart_products.all()
 
 
 def order_pre_save_receiver(sender, instance, *args, **kwargs):

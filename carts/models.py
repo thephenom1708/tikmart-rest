@@ -68,6 +68,10 @@ class CartProduct(models.Model):
     def __str__(self):
         return str(self.id) + '--' + self.product_variant.name + '--' + str(self.cart.id)
 
+    @property
+    def name(self):
+        return str(self.product_variant.product.title)
+
 
 def pre_save_cart_product_receiver(sender, instance, *args, **kwargs):
     old_instance = CartProduct.objects.filter(id=instance.id).first()

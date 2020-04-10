@@ -76,11 +76,11 @@ class ProductAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Product Details', {'fields': ('title', ('brand', 'type'), ('image', 'gender'), 'description')}),
         ('Customization', {'fields': ('attributes', )}),
-        ('Activity and Pricing', {'fields': ('price', ('featured', 'active'))}),
+        ('Activity and Pricing', {'fields': ('price', ('featured', 'active'), 'tags')}),
     )
     search_fields = ('title', 'brand', 'type', 'title', 'gender')
     ordering = ('title', 'brand', 'price', 'active', 'featured')
-    filter_horizontal = ('properties', 'attributes')
+    filter_horizontal = ('properties', 'attributes', 'tags')
 
 
 admin.site.register(ProductAttributeName, ProductAttributeNameAdmin)

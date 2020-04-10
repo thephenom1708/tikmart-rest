@@ -7,30 +7,14 @@ from django.db.models import Avg
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 from carts.utils import generateAttributesHash
+from products.choices import PRODUCT_TYPES, VIEW_SELECTION_TYPES, GENDER_CHOICES
 from products.managers import ProductManager, ProductVariantManager
 from products.utils import upload_image_path
 from smart_selects.db_fields import ChainedManyToManyField
+from tags.models import Tag
 from tikmart_rest.utils import unique_slug_generator
 
 User = settings.AUTH_USER_MODEL
-
-PRODUCT_TYPES = (
-    ('footwear', 'FOOTWEAR'),
-    ('clothing', 'CLOTHING'),
-    ('automobile', 'AUTOMOBILE'),
-    ('furniture', 'FURNITURE'),
-    ('electronic', 'ELECTRONIC'),
-    ('sports-equipment', 'SPORTS-EQUIPMENT'),
-    ('book', 'BOOK'),
-)
-
-GENDER_CHOICES = (
-    ('male', 'Male'), ('female', 'Female'), ('unisex', 'Unisex'), ('kid', 'Kid'), ('NA', 'NA')
-)
-
-VIEW_SELECTION_TYPES = (
-    ('single-selection', 'Single Selection'), ('multiple-selection', 'Multiple Selection'), ('NA', 'NA')
-)
 
 
 class ProductAttributeName(models.Model):
@@ -109,11 +93,12 @@ class Product(models.Model):
     featured = models.BooleanField(default=False)
     active = models.BooleanField(default=True)
     timestamp = models.DateTimeField(auto_now_add=True)
+    tags = models.ManyToManyField(Tag, related_name='products', blank=True)
 
     objects = ProductManager()
 
-    def get_absolute_url(self):
-        return reverse("categories:" + str(self.type) + "_detail", kwargs={"slug": self.slug})
+    # def get_absolute_url(self):
+    #     return reverse("categories:" + str(self.type) + "_detail", kwargs={"slug": self.slug})
 
     def __str__(self):
         return self.title

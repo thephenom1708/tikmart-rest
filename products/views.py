@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, permissions, generics
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -21,6 +22,10 @@ class ProductViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         product_type = self.kwargs['product_type']
+        tag_id = self.request.query_params.get('tag')
+        if tag_id:
+            lookups = Q(tags__id=tag_id)
+            return Product.objects.filter(type=product_type, active=True).filter(lookups).distinct()
         return Product.objects.filter(type=product_type, active=True)
 
 

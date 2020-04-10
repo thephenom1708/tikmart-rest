@@ -7,6 +7,7 @@ urlpatterns = [
     # url(r'^filters/', include('products.product_filters.urls', namespace='product_filters_api')),
     url(r'^products/reviews/', include('reviews.urls', namespace='reviews_api')),
     url(r'^products/', include('products.urls', namespace='products_api')),
+    url(r'^tags/', include('tags.urls', namespace='tags_api')),
     url(r'^wishlist/', include('wishlist.urls', namespace='wishlist_api')),
     url(r'^cart/', include('carts.urls', namespace='carts_api')),
     url(r'^orders/', include('orders.urls', namespace='orders_api')),

@@ -5,8 +5,7 @@ from .models import Order
 
 class OrderAdmin(admin.ModelAdmin):
     date_hierarchy = 'timestamp'
-    list_display = (
-        'order_id', 'billing_profile', 'payment_method', 'status', 'total', 'timestamp', 'paid')
+    list_display = ('order_id', 'get_products', 'products_to_return', 'total', 'paid')
     list_filter = ('payment_method', 'status', 'paid', 'timestamp', 'active',)
     fieldsets = (
         ('Order', {'fields': ('order_id', ('cart', 'status'))}),
@@ -14,11 +13,24 @@ class OrderAdmin(admin.ModelAdmin):
         ('Activity and Pricing', {'fields': (('shipping_total', 'total'), ('payment_method', 'paid'), 'active')}),
     )
     search_fields = ('order_id', 'billing_profile__email', 'payment_method', 'status', 'timestamp')
-    ordering = ('payment_method', 'status', 'shipping_total', 'total', 'timestamp', 'paid')
+    ordering = ('total', 'timestamp')
     filter_horizontal = ()
 
     def get_products(self, obj):
-        return "\n".join([o.title for o in obj.cart.products.all()])
+        products = ", ".join([product.name for product in obj.products()])
+        if len(products):
+            return products
+        else:
+            return "---"
+    get_products.short_description = "Products"
+
+    def products_to_return(self, obj):
+        products = ", ".join([product.name for product in obj.products().filter(applied_for_return=True)])
+        if len(products):
+            return products
+        else:
+            return "---"
+    products_to_return.short_description = "Products To Return"
 
 
 admin.site.register(Order, OrderAdmin)
